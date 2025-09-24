@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      # Development settings
+      - DEBUG=True
+      - SECRET_KEY=kiu-journeys-dev-secret-key-2024-very-secure-random-string
+      - ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,*
+      - DJANGO_SETTINGS_MODULE=kiu_journeys_search.settings
+      
+      # Production example (uncomment and modify for production):
+      # - DEBUG=False  
+      # - SECRET_KEY=your-production-secret-key-50-chars-minimum
+      # - ALLOWED_HOSTS=yourdomain.com,api.yourdomain.com
+    command: python manage.py runserver 0.0.0.0:8000
