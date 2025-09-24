@@ -16,5 +16,5 @@ Including another URLconf
 from django.urls import path, include
 
 urlpatterns = [
-    path('journey/', include('journey.urls')),
+    path('journey/', include('journey.app.urls')),
 ]
