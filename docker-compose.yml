@@ -18,4 +18,21 @@ services:
       - FLIGHT_API_URL=https://mock.apidog.com/m1/814105-793312-default/flight-events
       - FLIGHT_API_TIMEOUT=30
       
+      # Cache Configuration
+      - REDIS_URL=redis://redis:6379/0
+      - CACHE_TTL=3600  # 1 hour cache TTL
+      
+    depends_on:
+      - redis
     command: python manage.py runserver 0.0.0.0:8000
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+
+volumes:
+  redis_data:

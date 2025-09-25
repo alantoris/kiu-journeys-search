@@ -16,6 +16,7 @@ This API allows searching for flight journeys between cities on specific dates. 
 - 🌍 **UTC Time Handling**: Built-in UTC time management
 - ✈️ **Journey Search**: Find direct and connecting flights
 - 🔗 **Connection Validation**: Smart connection time and duration checks
+- ⚡ **Redis Caching**: Intelligent caching to reduce external API calls
 - 🧪 **Fully Tested**: Comprehensive test suite
 
 ## 🚀 Quick Start
@@ -247,6 +248,24 @@ This API includes Swagger/OpenAPI documentation, which requires additional Djang
 - No persistent data storage
 - Required for Django admin templates
 
+#### Cache Configuration
+The API includes a Redis-based caching system to improve performance and reduce external API calls:
+
+**Environment Variables:**
+- `REDIS_URL`: Redis connection URL (default: `redis://localhost:6379/0`)
+- `CACHE_TTL`: Cache time-to-live in seconds (default: `3600` = 1 hour)
+
+**Cache Behavior:**
+- Flight events are cached by date with configurable TTL
+- Cache-first strategy: checks cache before making external API calls
+- Automatic cache population after successful API responses
+- Graceful fallback to API when cache is unavailable
+
+**Docker Setup:**
+- Redis service included in `docker-compose.yml`
+- Automatic volume persistence for cache data
+- Pre-configured connection between web and Redis services
+
 #### Considerations
 - These dependencies add minimal overhead since no actual authentication or admin functionality is used
 - The database is in-memory and requires no setup or migrations
@@ -319,6 +338,11 @@ These are easily configurable for future versions in `journey/core/config.py`.
 - **aiohttp:** Async HTTP client for external API calls
 - **drf-yasg:** Swagger/OpenAPI documentation for Django REST Framework
 
+### Cache Dependencies
+- **Redis:** In-memory data structure store for caching
+- **aioredis:** Async Redis client for Python
+- **redis:** Redis Python client (synchronous operations)
+
 ### Development Dependencies
 - **pytest:** Testing framework
 - **pytest-django:** Django integration for pytest
@@ -353,5 +377,13 @@ The application is production-ready with:
 - Uses in-memory SQLite (`:memory:`) for Django admin dependencies
 - No persistent storage or migrations required
 - Automatically recreated on each application restart
+
+#### Redis Cache
+- **Production Setup**: Configure `REDIS_URL` to point to your production Redis instance
+- **High Availability**: Consider Redis Cluster or Redis Sentinel for production
+- **Memory Management**: Monitor Redis memory usage and configure eviction policies
+- **Cache TTL**: Adjust `CACHE_TTL` based on your data freshness requirements
+- **Backup Strategy**: Implement Redis persistence (RDB/AOF) for cache durability
+- **Security**: Configure Redis authentication and network access controls
 
 For production deployment, ensure all required environment variables are properly set and use a production-grade WSGI server.

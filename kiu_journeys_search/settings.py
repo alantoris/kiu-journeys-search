@@ -151,6 +151,10 @@ FLIGHT_API_URL = os.environ.get(
 )
 FLIGHT_API_TIMEOUT = int(os.environ.get('FLIGHT_API_TIMEOUT', '30'))
 
+# Cache Configuration
+REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379/0')
+CACHE_TTL = int(os.environ.get('CACHE_TTL', '3600'))  # Default 1 hour
+
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

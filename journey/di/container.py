@@ -6,6 +6,7 @@ from django.conf import settings
 
 from ..core.services.journey_service import JourneyService
 from ..infrastructure.adapters.flight_api_adapter import FlightApiAdapter
+from ..infrastructure.adapters.cache_service import CacheService
 
 
 class DIContainer:
@@ -15,6 +16,7 @@ class DIContainer:
     
     def __init__(self):
         self._flight_api_adapter: Optional[FlightApiAdapter] = None
+        self._cache_service: Optional[CacheService] = None
     
     def _get_flight_api_url(self) -> str:
         """Get flight API URL from settings"""
@@ -25,11 +27,19 @@ class DIContainer:
         )
     
     @property
+    def cache_service(self) -> CacheService:
+        """Get CacheService instance (Singleton)"""
+        if self._cache_service is None:
+            self._cache_service = CacheService()
+        return self._cache_service
+    
+    @property
     def flight_api_adapter(self) -> FlightApiAdapter:
         """Get FlightApiAdapter instance (Singleton)"""
         if self._flight_api_adapter is None:
             self._flight_api_adapter = FlightApiAdapter(
-                api_url=self._get_flight_api_url()
+                api_url=self._get_flight_api_url(),
+                cache_service=self.cache_service
             )
         return self._flight_api_adapter
     
@@ -42,6 +52,7 @@ class DIContainer:
     def reset(self):
         """Reset singleton instances (useful for testing)"""
         self._flight_api_adapter = None
+        self._cache_service = None
 
 
 # Global container instance
