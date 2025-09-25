@@ -7,7 +7,7 @@ from datetime import date, datetime
 from django.test import TestCase
 
 from ...core.services.journey_service import JourneyService
-from ...core.entities.flight_event import FlightEvent
+from ...core.entities.flight_event import FlightEvent, Journey
 
 
 class TestJourneyService(TestCase):

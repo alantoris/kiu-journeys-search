@@ -225,9 +225,9 @@ class TestJourneySearchIntegration(TestCase):
         """Test that validation errors are handled correctly in the integration flow."""
         # Test with invalid parameters - should not reach the service layer
         response = self.client.get(self.url, {
-            'date': '2024-12-24',  # Past date
+            'date': '2024-12-24',
             'from': 'MAD',
-            'to': 'BCN'
+            'to': 'MAD'  # Same origin and destination (should fail)
         })
 
         # Verify validation error returned before reaching service layer

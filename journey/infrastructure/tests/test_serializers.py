@@ -138,8 +138,8 @@ class TestJourneySearchRequestSerializer:
         assert validated_data['to_city'] == 'BCN'
     
     @freeze_time("2024-09-15")
-    def test_yesterday_date_validation_error(self):
-        """Test that yesterday's date is rejected"""
+    def test_yesterday_date_is_valid(self):
+        """Test that yesterday's date is now accepted"""
         data = {
             'date': '2024-09-14',  # Yesterday
             'from': 'MAD',
@@ -147,8 +147,10 @@ class TestJourneySearchRequestSerializer:
         }
         
         serializer = JourneySearchRequestSerializer(data=data)
-        assert not serializer.is_valid()
-        assert 'Search date cannot be in the past' in str(serializer.errors)
+        assert serializer.is_valid()
+        
+        validated_data = serializer.validated_data
+        assert validated_data['date'] == date(2024, 9, 14)
     
     @freeze_time("2024-09-15")
     def test_today_date_is_valid(self):
