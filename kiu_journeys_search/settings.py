@@ -47,27 +47,54 @@ ALLOWED_HOSTS = ALLOWED_HOSTS_ENV.split(',')
 
 INSTALLED_APPS = [
     'django.contrib.contenttypes',
+    'django.contrib.auth',  # Needed for admin
+    'django.contrib.messages',  # Needed for admin
+    'django.contrib.staticfiles',  # Needed for drf-yasg
+    'django.contrib.admin',  # Needed for drf-yasg templates
     'rest_framework',
     'corsheaders',
+    'drf_yasg',
     'journey',
 ]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',  # Needed for admin
     'django.middleware.common.CommonMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # Needed for admin
+    'django.contrib.messages.middleware.MessageMiddleware',  # Needed for admin
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'kiu_journeys_search.urls'
 
-TEMPLATES = []
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',  # Needed for admin
+                'django.contrib.messages.context_processors.messages',  # Needed for admin
+            ],
+        },
+    },
+]
 
 WSGI_APPLICATION = 'kiu_journeys_search.wsgi.application'
 
 
-# No database needed
-DATABASES = {}
+# Database configuration (minimal for drf-yasg)
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': ':memory:',  # In-memory database
+    }
+}
 
 
 # No authentication needed
@@ -116,3 +143,34 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
+
+# Journey Search Service Configuration
+FLIGHT_API_URL = os.environ.get(
+    'FLIGHT_API_URL', 
+    'https://mock.apidog.com/m1/814105-793312-default/flight-events'
+)
+FLIGHT_API_TIMEOUT = int(os.environ.get('FLIGHT_API_TIMEOUT', '30'))
+
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Swagger/OpenAPI Configuration
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {},  # No authentication required
+    'USE_SESSION_AUTH': False,
+    'JSON_EDITOR': True,
+    'SUPPORTED_SUBMIT_METHODS': [
+        'get',
+        'post',
+        'put',
+        'delete',
+        'patch'
+    ],
+    'OPERATIONS_SORTER': 'alpha',
+    'TAGS_SORTER': 'alpha',
+    'DOC_EXPANSION': 'none',
+    'DEEP_LINKING': True,
+    'SHOW_EXTENSIONS': True,
+    'DEFAULT_MODEL_RENDERING': 'example'
+}

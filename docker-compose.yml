@@ -14,8 +14,8 @@ services:
       - ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,*
       - DJANGO_SETTINGS_MODULE=kiu_journeys_search.settings
       
-      # Production example (uncomment and modify for production):
-      # - DEBUG=False  
-      # - SECRET_KEY=your-production-secret-key-50-chars-minimum
-      # - ALLOWED_HOSTS=yourdomain.com,api.yourdomain.com
+      # Journey Service Configuration
+      - FLIGHT_API_URL=https://mock.apidog.com/m1/814105-793312-default/flight-events
+      - FLIGHT_API_TIMEOUT=30
+      
     command: python manage.py runserver 0.0.0.0:8000
