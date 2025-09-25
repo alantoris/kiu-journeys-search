@@ -226,6 +226,33 @@ journey/
 - **v2.0+:** Support for overnight connections
 - **v2.0+:** Different journey types (business, leisure)
 
+#### Performance Optimization Roadmap
+
+**External API Optimization:**
+- **Filtered API Calls:** Investigate if external flight APIs support filtering by date, origin, and destination to reduce data transfer and improve response times
+- **Query Parameters:** Implement selective data fetching instead of downloading all flight events for a date
+- **Network Efficiency:** Analyze API response patterns to minimize bandwidth usage
+
+**Advanced Caching Strategy:**
+- **Smart Cache Schema:** Analyze search patterns to identify most common city/date combinations
+- **Selective Caching:** Cache only frequently requested routes rather than all possible combinations
+- **Memory Management:** Implement cache eviction policies based on usage frequency and recency
+- **Cache Warming:** Pre-populate cache with popular routes during low-traffic periods
+- **Distributed Caching:** Consider cache sharding for high-volume scenarios
+
+**Analytics & Monitoring:**
+- **Search Pattern Analysis:** Track most common origin/destination pairs and dates
+- **Cache Hit Ratio Monitoring:** Measure cache effectiveness and optimize TTL values
+- **API Response Time Tracking:** Monitor external API performance and identify bottlenecks
+- **Memory Usage Analytics:** Track Redis memory consumption patterns for optimization
+
+**Implementation Strategy:**
+- **Phase 1:** Implement search pattern logging and basic analytics
+- **Phase 2:** Analyze collected data to identify top 20% most requested routes
+- **Phase 3:** Implement selective caching for popular routes only
+- **Phase 4:** Investigate external API filtering capabilities
+- **Phase 5:** Implement filtered API calls and advanced cache eviction policies
+
 ## ⚙️ Configuration
 
 ### Django Dependencies for Swagger
