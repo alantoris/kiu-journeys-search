@@ -102,10 +102,10 @@ For interactive testing and detailed API documentation:
 1. **Open Swagger UI**: http://localhost:8000/swagger/
 2. **Find the endpoint**: Look for "Journey Search" section
 3. **Click "Try it out"** on the `/journey/search/` endpoint
-4. **Enter parameters**:
-   - `date`: `2024-12-25`
+4. **Enter parameters** (using valid future dates):
+   - `date`: `2025-12-31`
    - `from`: `MAD`
-   - `to`: `BCN`
+   - `to`: `BUE`
 5. **Click "Execute"** to test the API
 6. **View response** with detailed examples and error codes
 
