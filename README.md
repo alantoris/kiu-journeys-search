@@ -32,6 +32,9 @@ docker-compose up --build
 # Run in background
 docker-compose up --build -d
 
+# Run tests
+docker-compose exec web python -m pytest -v
+
 # Stop the service
 docker-compose down
 ```
