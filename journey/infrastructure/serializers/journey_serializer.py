@@ -82,10 +82,6 @@ class JourneySearchRequestSerializer(serializers.Serializer):
                 "Origin and destination cities cannot be the same"
             )
         
-        # Validate search date is not in the past
-        if search_date and search_date < date.today():
-            raise serializers.ValidationError("Search date cannot be in the past")
-        
         # Normalize city codes to uppercase
         data['from_city'] = from_city
         data['to_city'] = to_city

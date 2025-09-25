@@ -43,8 +43,8 @@ class TestJourneySearchRequestSerializer:
         assert validated_data['date'] == date(2024, 9, 15)
     
     @freeze_time("2024-09-15")
-    def test_past_date_validation_error(self):
-        """Test that past dates are rejected"""
+    def test_past_date_is_valid(self):
+        """Test that past dates are now accepted"""
         data = {
             'date': '2024-09-14',  # Yesterday
             'from': 'MAD',
@@ -52,12 +52,14 @@ class TestJourneySearchRequestSerializer:
         }
         
         serializer = JourneySearchRequestSerializer(data=data)
-        assert not serializer.is_valid()
-        assert 'Search date cannot be in the past' in str(serializer.errors)
+        assert serializer.is_valid()
+        
+        validated_data = serializer.validated_data
+        assert validated_data['date'] == date(2024, 9, 14)
     
     @freeze_time("2024-09-15")
-    def test_far_past_date_validation_error(self):
-        """Test that dates far in the past are rejected"""
+    def test_far_past_date_is_valid(self):
+        """Test that dates far in the past are now accepted"""
         data = {
             'date': '2024-01-01',  # Far in the past
             'from': 'MAD',
@@ -65,8 +67,10 @@ class TestJourneySearchRequestSerializer:
         }
         
         serializer = JourneySearchRequestSerializer(data=data)
-        assert not serializer.is_valid()
-        assert 'Search date cannot be in the past' in str(serializer.errors)
+        assert serializer.is_valid()
+        
+        validated_data = serializer.validated_data
+        assert validated_data['date'] == date(2024, 1, 1)
     
     def test_invalid_date_format(self):
         """Test that invalid date formats are rejected"""

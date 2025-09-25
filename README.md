@@ -81,6 +81,8 @@ The API includes interactive documentation powered by Swagger/OpenAPI:
 
 Search for flight journeys between two cities on a specific date.
 
+**Note:** Past date validation is currently disabled for testing purposes since the external API only returns historical data from 2021-12-31. Future versions should include past date validation to reject queries for dates before today.
+
 #### Parameters
 
 | Parameter | Type | Required | Format | Description |
@@ -91,8 +93,41 @@ Search for flight journeys between two cities on a specific date.
 
 #### Example Request
 
+**Working Example with Real Data:**
 ```bash
-curl "http://localhost:8000/journey/search/?date=2024-09-13&from=MAD&to=PMI"
+curl "http://localhost:8000/journey/search/?date=2021-12-31&from=MAD&to=BUE"
+```
+
+**With Pretty Print:**
+```bash
+curl -s "http://localhost:8000/journey/search/?date=2021-12-31&from=MAD&to=BUE" | python -m json.tool
+```
+
+**Expected Response:**
+```json
+[
+    {
+        "connections": 0,
+        "path": [
+            {
+                "flight_number": "IB1234",
+                "from": "MAD",
+                "to": "BUE",
+                "departure_time": "2021-12-31 23:59",
+                "arrival_time": "2022-01-01 12:00"
+            }
+        ]
+    }
+]
+```
+
+**Other Working Examples:**
+```bash
+# Test different dates (will return empty if no flights available)
+curl "http://localhost:8000/journey/search/?date=2025-12-31&from=MAD&to=BUE"
+
+# Test different routes
+curl "http://localhost:8000/journey/search/?date=2021-12-31&from=BUE&to=MAD"
 ```
 
 #### Using Swagger Documentation
@@ -102,8 +137,8 @@ For interactive testing and detailed API documentation:
 1. **Open Swagger UI**: http://localhost:8000/swagger/
 2. **Find the endpoint**: Look for "Journey Search" section
 3. **Click "Try it out"** on the `/journey/search/` endpoint
-4. **Enter parameters** (using valid future dates):
-   - `date`: `2025-12-31`
+4. **Enter parameters** (using real available data):
+   - `date`: `2021-12-31`
    - `from`: `MAD`
    - `to`: `BUE`
 5. **Click "Execute"** to test the API

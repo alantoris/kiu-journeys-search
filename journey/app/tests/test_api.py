@@ -148,18 +148,16 @@ class TestJourneySearchAPI(TestCase):
         self.assertIn('date', response.data['errors'])
 
     @freeze_time("2024-12-25")
-    def test_past_date_validation(self):
-        """Test API call with past date."""
+    def test_past_date_is_valid(self):
+        """Test API call with past date is now accepted."""
         response = self.client.get(self.url, {
             'date': '2024-12-24',  # Past date
             'from': 'MAD',
             'to': 'BCN'
         })
 
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('errors', response.data)
-        self.assertIn('non_field_errors', response.data['errors'])
-        self.assertIn('Search date cannot be in the past', str(response.data['errors']))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIsInstance(response.data, list)
 
     @freeze_time("2024-12-25")
     def test_same_origin_destination(self):

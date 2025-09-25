@@ -40,7 +40,6 @@ class JourneySearchView(APIView):
         
         **Business Rules:**
         - Maximum 2 flights per journey (v1.0 limitation)
-        - Search date cannot be in the past
         - Origin and destination must be different
         - Connection time between flights: max 4 hours
         - Total journey duration: max 24 hours
@@ -100,7 +99,7 @@ class JourneySearchView(APIView):
                     'application/json': {
                         "errors": {
                             "date": ["Date has wrong format. Use YYYY-MM-DD."],
-                            "non_field_errors": ["Search date cannot be in the past"]
+                            "non_field_errors": ["Origin and destination cities cannot be the same"]
                         }
                     }
                 }
